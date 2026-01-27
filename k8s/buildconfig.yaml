@@ -1,0 +1,45 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: graphrag-ui
+    app.kubernetes.io/component: graphrag-ui
+    app.kubernetes.io/instance: graphrag-ui
+    app.kubernetes.io/name: graphrag-ui
+  name: graphrag-ui
+  namespace: g-shama-graphrag-dev
+spec:
+  failedBuildsHistoryLimit: 3
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: graphrag-ui:latest
+  postCommit: {}
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2Gi
+    limits:
+      cpu: 4
+      memory: 8Gi
+  runPolicy: Serial
+  source:
+    contextDir: /rtc-deployment
+    git:
+      uri: git@github.com:nyuhpc/wiesenfeld-reflex-app.git
+      ref: main
+    sourceSecret:
+      name: github-wiesenfeld-reflex-app
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+    type: Docker
+  successfulBuildsHistoryLimit: 3
+  triggers:
+  - type: GitHub
+    github:
+      secretReference:
+        name: graphrag-ui-github-webhook-secret
+  - type: ConfigChange

@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: graphrag-ui
+    app.kubernetes.io/component: graphrag-ui
+    app.kubernetes.io/instance: graphrag-ui
+    app.kubernetes.io/name: graphrag-ui
+  name: graphrag-ui
+  namespace: g-shama-graphrag-dev
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: graphrag-ui
+      deployment: graphrag-ui
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources:
+      limits:
+        memory: 4000Mi
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: graphrag-ui
+        deployment: graphrag-ui
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/g-shama-graphrag-dev/graphrag-ui
+        imagePullPolicy: Always
+        name: graphrag-ui
+        ports:
+          - containerPort: 3000
+            name: reflex-frontend
+            protocol: TCP
+          - containerPort: 8000
+            name: reflex-backend
+            protocol: TCP
+        resources:
+          requests:
+            memory: 4Gi
+            cpu: 2
+          limits:
+            memory: 8Gi
+            cpu: 4
+        env:
+          - name: PORTKEY_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: portkey-api-key
+                key: api-key  
+          - name: PORTKEY_VIRTUAL_KEY
+            valueFrom:
+              secretKeyRef:
+                name: portkey-virtual-key
+                key: virtual-key
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - graphrag-ui
+      from:
+        kind: ImageStreamTag
+        name: graphrag-ui:latest
+        namespace: g-shama-graphrag-dev
+    type: ImageChange
+  - type: ConfigChange
