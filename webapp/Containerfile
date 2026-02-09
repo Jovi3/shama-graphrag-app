@@ -1,26 +1,41 @@
-FROM python:3.13-slim-trixie
+# Build stage - includes git for dependency installation
+FROM python:3.13-slim-trixie AS builder
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
+# Install git only in builder stage (needed for graphrag git dependency)
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    && apt-get install -y git \
+    && apt-get install -y --no-install-recommends git \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
+# Install dependencies (without dev dependencies)
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --dev --locked --no-install-project
+    uv sync --frozen --no-install-project --no-dev
+
+# Copy application code and install project
 COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --dev
+    uv sync --frozen --no-dev
+
+# Runtime stage - minimal image without build dependencies
+FROM python:3.13-slim-trixie
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Copy only the installed dependencies and app from builder
+COPY --from=builder /app /app
+
+WORKDIR /app
 
 ENV DATA_ROOT="/data"
+ENV UV_COMPILE_BYTECODE=1
 
-COPY secrets.toml /home/app/.streamlit/secrets.toml
+# Secrets should be mounted at runtime, not baked into image
+# Use: docker run -v /path/to/secrets.toml:/home/app/.streamlit/secrets.toml ...
 
-# Run application
 EXPOSE 8501
 ENTRYPOINT ["uv","run","streamlit","run","app/home_page.py","--server.port=8501","--server.address=0.0.0.0"]
