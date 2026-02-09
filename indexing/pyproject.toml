@@ -1,0 +1,10 @@
+[project]
+name = "graphrag-learn"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "graphrag>=3.0.1",
+]
+
+[tool.uv.sources]
+graphrag = { git = "https://github.com/s-sajid-ali/graphrag.git", branch = "bugfix/lancedb_uri_parse", subdirectory = "packages/graphrag"  }
