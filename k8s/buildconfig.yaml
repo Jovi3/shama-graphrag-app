@@ -25,16 +25,16 @@ spec:
       memory: 8Gi
   runPolicy: Serial
   source:
-    contextDir: /rtc-deployment
+    contextDir: /webapp
     git:
-      uri: git@github.com:nyuhpc/wiesenfeld-reflex-app.git
+      uri: git@github.com:NYU-RTS/shama-graphrag-app.git
       ref: main
     sourceSecret:
-      name: github-wiesenfeld-reflex-app
+      name: github-graphrag-webapp
     type: Git
   strategy:
     dockerStrategy:
-      dockerfilePath: Dockerfile
+      dockerfilePath: Containerfile
     type: Docker
   successfulBuildsHistoryLimit: 3
   triggers:

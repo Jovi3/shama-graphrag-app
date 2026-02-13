@@ -38,11 +38,8 @@ spec:
         imagePullPolicy: Always
         name: graphrag-ui
         ports:
-          - containerPort: 3000
-            name: reflex-frontend
-            protocol: TCP
-          - containerPort: 8000
-            name: reflex-backend
+          - containerPort: 8501
+            name: streamlit-port
             protocol: TCP
         resources:
           requests:
@@ -52,16 +49,37 @@ spec:
             memory: 8Gi
             cpu: 4
         env:
-          - name: PORTKEY_API_KEY
+          - name: GRAPHRAG_API_KEY
             valueFrom:
               secretKeyRef:
-                name: portkey-api-key
+                name: graphrag-api-key
                 key: api-key  
-          - name: PORTKEY_VIRTUAL_KEY
+          - name: EMBEDDING_API_KEY
             valueFrom:
               secretKeyRef:
-                name: portkey-virtual-key
+                name: embedding-api-key
                 key: virtual-key
+          - name: ALLOW_HTTP
+            value: "true"
+          - name: AWS_REGION
+            value: "dummy"
+          - name: AWS_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: aws-endpoint
+                key: url
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-access-key-id
+                key: key
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-secret-access-key-id
+                key: key 
+          - name: DB_URI
+            value: "s3://test-data"
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

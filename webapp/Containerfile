@@ -26,6 +26,11 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 FROM python:3.13-slim-trixie
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
+# Need git again
+RUN apt-get update \
+    && apt-get install -y git \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy only the installed dependencies and app from builder
 COPY --from=builder /app /app
 
@@ -34,8 +39,15 @@ WORKDIR /app
 ENV DATA_ROOT="/data"
 ENV UV_COMPILE_BYTECODE=1
 
-# Secrets should be mounted at runtime, not baked into image
-# Use: docker run -v /path/to/secrets.toml:/home/app/.streamlit/secrets.toml ...
-
 EXPOSE 8501
+
+#Set runas user
+ARG runasuserid="1001700000"
+
+#Set folder permissions
+RUN chown -R ${runasuserid}:${runasuserid} /app/
+
+# Set user in ocp
+USER ${runasuserid}
+
 ENTRYPOINT ["uv","run","streamlit","run","app/home_page.py","--server.port=8501","--server.address=0.0.0.0"]

@@ -1,20 +1,13 @@
-apiVersion: v1
-kind: Service
+apiVersion: image.openshift.io/v1
+kind: ImageStream
 metadata:
-  name: graphrag-ui
-  namespace: g-shama-graphrag-dev
   labels:
     app: graphrag-ui
-  annotations:
+    app.kubernetes.io/component: graphrag-ui
+    app.kubernetes.io/instance: graphrag-ui
+    app.kubernetes.io/name: graphrag-ui
+  name: graphrag-ui
+  namespace: g-shama-graphrag-dev
 spec:
-  type: ClusterIP
-  sessionAffinity: None
-  ports:
-    - name: reflex-frontend
-      port: 3000
-      targetPort: reflex-frontend
-    - name: reflex-backend
-      port: 8000
-      targetPort: reflex-backend
-  selector:
-    app: graphrag-ui
+  lookupPolicy:
+    local: false

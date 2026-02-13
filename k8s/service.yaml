@@ -10,11 +10,8 @@ spec:
   type: ClusterIP
   sessionAffinity: None
   ports:
-    - name: reflex-frontend
-      port: 3000
-      targetPort: reflex-frontend
-    - name: reflex-backend
-      port: 8000
-      targetPort: reflex-backend
+    - name: streamlit-clusterip
+      port: 8501
+      targetPort: streamlit-port
   selector:
     app: graphrag-ui

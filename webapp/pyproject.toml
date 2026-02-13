@@ -14,7 +14,7 @@ dependencies = [
     "streamlit-agraph~=0.0.45",
     "st-tabs~=0.1",
     "spacy~=3.8",
-    "graphrag>=3.0.1",
+    "graphrag",
 ]
 
 [project.optional-dependencies]
@@ -26,12 +26,11 @@ dev = [
 ]
 
 [build-system]
-requires = ["setuptools>=64", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.setuptools.packages.find]
-include = ["app*"]
-exclude = ["images*"]
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
 
 [tool.poe.tasks]
 start = "streamlit run app/home_page.py"
