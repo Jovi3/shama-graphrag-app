@@ -29,8 +29,6 @@ spec:
     git:
       uri: git@github.com:NYU-RTS/shama-graphrag-app.git
       ref: main
-    sourceSecret:
-      name: github-graphrag-webapp
     type: Git
   strategy:
     dockerStrategy:
