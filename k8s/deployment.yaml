@@ -37,6 +37,9 @@ spec:
       - image: image-registry.openshift-image-registry.svc:5000/g-shama-graphrag-dev/graphrag-ui
         imagePullPolicy: Always
         name: graphrag-ui
+        volumeMounts:
+        - mountPath: /data
+          name: graphrag-pvc
         ports:
           - containerPort: 8501
             name: streamlit-port
@@ -80,6 +83,10 @@ spec:
                 key: key 
           - name: DB_URI
             value: "s3://test-data"
+      volumes:
+      - name: graphrag-pvc
+        persistentVolumeClaim:
+          claimName: graphrag-pvc
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
