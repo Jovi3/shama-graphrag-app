@@ -11,10 +11,6 @@ RUN apt-get update \
 
 WORKDIR /app
 
-RUN mkdir -p /tmp/uv
-# Need this to prevent os13 errors on shipwright.
-ENV UV_CACHE_DIR=/tmp/uv
-
 # Install dependencies (without dev dependencies)
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
@@ -40,10 +36,6 @@ COPY --from=builder /app /app
 
 WORKDIR /app
 
-RUN mkdir -p /tmp/uv
-# Need this to prevent os13 errors on shipwright.
-ENV UV_CACHE_DIR=/tmp/uv
-
 ENV DATA_ROOT="/data"
 ENV UV_COMPILE_BYTECODE=1
 
@@ -54,6 +46,7 @@ ARG runasuserid="1001700000"
 
 #Set folder permissions
 RUN chown -R ${runasuserid}:${runasuserid} /app/
+RUN chown -R ${runasuserid}:${runasuserid} /.cache/
 
 # Set user in ocp
 USER ${runasuserid}
