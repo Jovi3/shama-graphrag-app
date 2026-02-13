@@ -1,0 +1,21 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: graphrag-route
+  namespace: g-shama-graphrag-dev
+  labels:
+    app: graphrag-ui
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: ui-g-shama-graphrag-dev.apps.cloud.rt.nyu.edu
+  to:
+    kind: Service
+    name: graphrag-ui-service
+    weight: 100
+  port:
+    targetPort: streamlit-port
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: graphrag-ui
+  name: graphrag-ui-service
   namespace: g-shama-graphrag-dev
   labels:
     app: graphrag-ui
