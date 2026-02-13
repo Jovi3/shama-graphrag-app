@@ -44,6 +44,9 @@ EXPOSE 8501
 #Set runas user
 ARG runasuserid="1001700000"
 
+# create the .cache folder so that we can set permissions on it
+RUN mkdir -p /.cache
+
 #Set folder permissions
 RUN chown -R ${runasuserid}:${runasuserid} /app/
 RUN chown -R ${runasuserid}:${runasuserid} /.cache/
