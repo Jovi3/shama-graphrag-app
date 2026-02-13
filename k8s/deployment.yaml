@@ -58,7 +58,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: embedding-api-key
-                key: virtual-key
+                key: api-key
           - name: ALLOW_HTTP
             value: "true"
           - name: AWS_REGION

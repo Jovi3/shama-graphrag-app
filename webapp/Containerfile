@@ -11,6 +11,10 @@ RUN apt-get update \
 
 WORKDIR /app
 
+RUN mkdir -p /tmp/uv
+# Need this to prevent os13 errors on shipwright.
+ENV UV_CACHE_DIR=/tmp/uv
+
 # Install dependencies (without dev dependencies)
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
@@ -35,6 +39,10 @@ RUN apt-get update \
 COPY --from=builder /app /app
 
 WORKDIR /app
+
+RUN mkdir -p /tmp/uv
+# Need this to prevent os13 errors on shipwright.
+ENV UV_CACHE_DIR=/tmp/uv
 
 ENV DATA_ROOT="/data"
 ENV UV_COMPILE_BYTECODE=1
