@@ -82,7 +82,7 @@ spec:
                 name: aws-secret-access-key-id
                 key: key 
           - name: DB_URI
-            value: "s3://test-data"
+            value: "s3://shama-graphrag-dev"
       volumes:
       - name: graphrag-pvc
         persistentVolumeClaim:
