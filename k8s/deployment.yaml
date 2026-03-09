@@ -52,6 +52,8 @@ spec:
             memory: 16Gi
             cpu: 4
         env:
+          - name: PYTHONTRACEMALLOC
+            value: "1"
           - name: GRAPHRAG_API_KEY
             valueFrom:
               secretKeyRef:
