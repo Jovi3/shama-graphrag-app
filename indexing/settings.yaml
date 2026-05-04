@@ -63,13 +63,13 @@ vector_store:
   index_schema:
     text_unit_text:
       index_name: default-text_unit-text
-      vector_size: 1536
+      vector_size: 3072
     entity_description:
       index_name: default-entity-description
-      vector_size: 1536
+      vector_size: 3072
     community_full_content:
       index_name: default-community-full_content
-      vector_size: 1536
+      vector_size: 3072
 
 ### Workflow settings ###
 
