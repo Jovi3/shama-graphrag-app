@@ -54,10 +54,17 @@ def display_search_result(
             st.markdown(
                 f"*{stats.prompt_tokens:,} tokens used, {stats.llm_calls} LLM calls, {int(stats.completion_time)} seconds elapsed.*"
             )
+
         st.session_state[response_placeholder_attr] = st.markdown(
-            f"<div id='{result.search_type.value.lower()}-response'>{response}</div>",
-            unsafe_allow_html=True,
+             response,
+             unsafe_allow_html=True,
         )
+
+
+       # st.session_state[response_placeholder_attr] = st.markdown(
+       #     f"<div id='{result.search_type.value.lower()}-response'>{response}</div>",
+       #     unsafe_allow_html=True,
+       # )
 
 
 def display_citations(
